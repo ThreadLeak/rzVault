@@ -1,5 +1,7 @@
 # rzVault
 
+[![CodeFactor](https://www.codefactor.io/repository/github/threadleak/rzvault/badge)](https://www.codefactor.io/repository/github/threadleak/rzvault)
+
 [Русский](README.ru.md) · [License](LICENSE) · [Changes](CHANGELOG.md)
 
 A small, classic Vault API bridge for modern Paper servers. Originally created
