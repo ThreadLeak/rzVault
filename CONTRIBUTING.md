@@ -1,6 +1,10 @@
 # Contributing
 
 1. Use JDK 21 and run `sh ./mvnw verify` or `.\mvnw.cmd verify` on Windows.
+   The build checks runtime and test Java style using the root `checkstyle.xml`,
+   aligned with CodeFactor's published rules. Keep one statement per line, use
+   four-space indentation and explicit package imports. Format owned Java code
+   only; preserve the vendored VaultAPI source bytes.
 2. Keep runtime code in its functional `dev.raze.rzvault` package.
 3. Preserve the classic `net.milkbowl.vault.*` ABI, `provides: Vault`, and existing
    config keys/permissions. The vendored API is intentionally unchanged; discuss
@@ -15,8 +19,8 @@
 ## Versions
 
 `pom.xml` is the single source of the plugin version; `plugin.yml` is filtered by
-Maven. The current release is 1.0.1. The next changed distributable must use a new
-patch version (1.0.2), with README/CHANGELOG/release filenames kept consistent.
+Maven. The current version is 1.0.2. The next changed distributable must use a new
+patch version (1.0.3), with README/CHANGELOG/release filenames kept consistent.
 Compile/test-only runs do not create a distributable release. See
 [docs/RELEASING.md](docs/RELEASING.md).
 

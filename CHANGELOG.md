@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.0.2 — 2026-10-29
+
+- Resolve all 210 locally reproduced CodeFactor Java findings by placing each
+  statement on its own line in runtime code and tests.
+- Expand package imports, add braces to runtime control flow, and consistently
+  format owned Java sources without changing plugin behavior.
+- Run pinned Checkstyle during every Maven build and the existing CI workflow.
+  The checks include tests and the vendored API, with no rule suppressions.
+- Preserve the five original VaultAPI source files byte for byte and retain the
+  existing classic API, configuration, commands and permissions.
+
 ## 1.0.1 — 2026-10-29
 
 Public distribution preparation:

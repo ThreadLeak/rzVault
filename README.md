@@ -42,7 +42,7 @@ provider/consumer combination before deployment.
 ## Installation
 
 1. Stop the server and keep a backup of the existing bridge JAR/configuration.
-2. Install **`rzVault-1.0.1.jar`** in `plugins/`.
+2. Install **`rzVault-1.0.2.jar`** in `plugins/`.
 3. Use **one Vault implementation**: remove the previous Vault, VaultUnlocked or
    rzVault JAR. Do not install `*-sources.jar`.
 4. Start the server with your provider plugins, then run `/rzvault` from the
@@ -88,8 +88,8 @@ sh ./mvnw --batch-mode --no-transfer-progress verify
 
 Outputs:
 
-- `target/rzVault-1.0.1.jar` — installable plugin, with the classic API included.
-- `target/rzVault-1.0.1-sources.jar` — source artifact, not a plugin.
+- `target/rzVault-1.0.2.jar` — installable plugin, with the classic API included.
+- `target/rzVault-1.0.2-sources.jar` — source artifact, not a plugin.
 
 The Paper API uses an exact published snapshot revision; Maven/plugins are pinned
 and archive timestamps are fixed. This supports repeatable builds with the same

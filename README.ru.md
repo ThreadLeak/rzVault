@@ -27,7 +27,7 @@ rzVault предоставляет API `net.milkbowl.vault.*`, показыва�
 Целевая платформа: **Paper 1.21.11, Java 21**. Другие версии не проверены.
 
 1. Остановить сервер и сохранить прежний JAR моста и его настройки.
-2. Установить `rzVault-1.0.1.jar` в `plugins/`.
+2. Установить `rzVault-1.0.2.jar` в `plugins/`.
 3. Использовать только один мост: убрать прежний Vault, VaultUnlocked или rzVault.
    `*-sources.jar` на сервер не устанавливать.
 4. Запустить сервер с плагинами-провайдерами и выполнить `/rzvault`.
@@ -65,7 +65,7 @@ VaultUnlocked не реализованы. Неисправный выбранн
 
 Linux/macOS: `sh ./mvnw --batch-mode --no-transfer-progress verify`.
 
-Результат: `target/rzVault-1.0.1.jar`; исходники — отдельный `*-sources.jar`.
+Результат: `target/rzVault-1.0.2.jar`; исходники — отдельный `*-sources.jar`.
 Проверки GitHub Actions настроены для Linux и Windows; их выполнение на GitHub
 произойдёт после загрузки репозитория. [Как опубликовать проект](docs/PUBLISH.ru.md) · [Выпуск релиза](docs/RELEASING.md).
 

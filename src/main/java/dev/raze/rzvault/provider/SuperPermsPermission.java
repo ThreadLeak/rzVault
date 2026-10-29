@@ -6,21 +6,30 @@
 package dev.raze.rzvault.provider;
 
 import net.milkbowl.vault.permission.Permission;
+
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.permissions.PermissionAttachment;
-import java.util.*;
+import org.bukkit.plugin.Plugin;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Objects;
+import java.util.UUID;
 
 @SuppressWarnings("deprecation")
 public final class SuperPermsPermission extends Permission implements Listener, AutoCloseable {
 
     private static final String NAME = "SuperPerms";
+
     private record Owned(Player player, PermissionAttachment attachment) {}
+
     private final Map<UUID, Owned> attachments = new HashMap<>();
     private volatile boolean closed;
 
@@ -50,50 +59,82 @@ public final class SuperPermsPermission extends Permission implements Listener, 
 
     @Override
     public boolean playerHas(String world, String player, String permission) {
-        if (!isEnabled() || player == null || permission == null) return false;
+        if (!isEnabled() || player == null || permission == null) {
+            return false;
+        }
         Player online = plugin.getServer().getPlayerExact(player);
         return online != null && online.isOnline() && online.hasPermission(permission);
     }
 
     @Override
     public boolean playerHas(String world, OfflinePlayer player, String permission) {
-        if (!isEnabled() || player == null || permission == null) return false;
+        if (!isEnabled() || player == null || permission == null) {
+            return false;
+        }
         Player online = player.getPlayer();
         return online != null && online.isOnline() && online.hasPermission(permission);
     }
 
-    @Override public boolean playerAddTransient(String world, OfflinePlayer player, String permission) {
+    @Override
+    public boolean playerAddTransient(String world, OfflinePlayer player, String permission) {
         return playerAddTransient(player, permission);
     }
-    @Override public boolean playerAddTransient(String world, Player player, String permission) {
+
+    @Override
+    public boolean playerAddTransient(String world, Player player, String permission) {
         return playerAddTransient(player, permission);
     }
-    @Override public boolean playerRemoveTransient(String world, OfflinePlayer player, String permission) {
+
+    @Override
+    public boolean playerRemoveTransient(String world, OfflinePlayer player, String permission) {
         return playerRemoveTransient(player, permission);
     }
-    @Override public boolean playerRemoveTransient(String world, Player player, String permission) {
+
+    @Override
+    public boolean playerRemoveTransient(String world, Player player, String permission) {
         return playerRemoveTransient(player, permission);
     }
-    @Override public boolean playerAddTransient(OfflinePlayer player, String permission) {
+
+    @Override
+    public boolean playerAddTransient(OfflinePlayer player, String permission) {
         return canMutate() && player != null && playerAddTransient(player.getPlayer(), permission);
     }
-    @Override public boolean playerRemoveTransient(OfflinePlayer player, String permission) {
-        return canMutate() && player != null && playerRemoveTransient(player.getPlayer(), permission);
+
+    @Override
+    public boolean playerRemoveTransient(OfflinePlayer player, String permission) {
+        return canMutate()
+                && player != null
+                && playerRemoveTransient(player.getPlayer(), permission);
     }
-    @Override public boolean playerAddTransient(Player player, String permission) {
-        if (!canMutate() || player == null || !player.isOnline() || permission == null || permission.isBlank()) return false;
+
+    @Override
+    public boolean playerAddTransient(Player player, String permission) {
+        if (!canMutate()
+                || player == null
+                || !player.isOnline()
+                || permission == null
+                || permission.isBlank()) {
+            return false;
+        }
         UUID uuid = player.getUniqueId();
         Owned owned = attachments.get(uuid);
-        if (owned != null && owned.player() != player) { remove(uuid); owned = null; }
+        if (owned != null && owned.player() != player) {
+            remove(uuid);
+            owned = null;
+        }
         try {
             if (owned == null) {
                 owned = new Owned(player, player.addAttachment(plugin));
                 Owned expected = owned;
                 attachments.put(uuid, owned);
-                owned.attachment().setRemovalCallback(ignored -> attachments.remove(uuid, expected));
+                owned.attachment()
+                        .setRemovalCallback(ignored -> attachments.remove(uuid, expected));
             }
             owned.attachment().setPermission(permission.toLowerCase(Locale.ROOT), true);
-            if (!isEnabled() || !player.isOnline() || attachments.get(uuid) != owned) { remove(uuid, owned); return false; }
+            if (!isEnabled() || !player.isOnline() || attachments.get(uuid) != owned) {
+                remove(uuid, owned);
+                return false;
+            }
             return true;
         } catch (RuntimeException e) {
             remove(uuid, owned);
@@ -101,40 +142,78 @@ public final class SuperPermsPermission extends Permission implements Listener, 
             return false;
         }
     }
-    @Override public boolean playerRemoveTransient(Player player, String permission) {
-        if (!canMutate() || player == null || !player.isOnline() || permission == null || permission.isBlank()) return false;
+
+    @Override
+    public boolean playerRemoveTransient(Player player, String permission) {
+        if (!canMutate()
+                || player == null
+                || !player.isOnline()
+                || permission == null
+                || permission.isBlank()) {
+            return false;
+        }
         UUID uuid = player.getUniqueId();
         Owned owned = attachments.get(uuid);
-        if (owned == null || owned.player() != player) return false;
+        if (owned == null || owned.player() != player) {
+            return false;
+        }
         String node = permission.toLowerCase(Locale.ROOT);
-        if (!owned.attachment().getPermissions().containsKey(node)) return false;
+        if (!owned.attachment().getPermissions().containsKey(node)) {
+            return false;
+        }
         try {
             owned.attachment().unsetPermission(node);
-            if (owned.attachment().getPermissions().isEmpty()) remove(uuid, owned);
+            if (owned.attachment().getPermissions().isEmpty()) {
+                remove(uuid, owned);
+            }
             return true;
-        } catch (RuntimeException e) { warn(e); return false; }
+        } catch (RuntimeException e) {
+            warn(e);
+            return false;
+        }
     }
-    private boolean canMutate() { return isEnabled() && plugin.getServer().isPrimaryThread(); }
+
+    private boolean canMutate() {
+        return isEnabled() && plugin.getServer().isPrimaryThread();
+    }
+
     @EventHandler(priority = EventPriority.MONITOR)
     public void onQuit(PlayerQuitEvent event) {
         UUID uuid = event.getPlayer().getUniqueId();
         Owned owned = attachments.get(uuid);
-        if (owned != null && owned.player() == event.getPlayer()) remove(uuid);
+        if (owned != null && owned.player() == event.getPlayer()) {
+            remove(uuid);
+        }
     }
+
     private void remove(UUID uuid) {
         remove(uuid, attachments.get(uuid));
     }
+
     private void remove(UUID uuid, Owned owned) {
-        if (owned == null || !attachments.remove(uuid, owned)) return;
-        try { owned.attachment().remove(); }
-        catch (RuntimeException e) { warn(e); }
+        if (owned == null || !attachments.remove(uuid, owned)) {
+            return;
+        }
+        try {
+            owned.attachment().remove();
+        } catch (RuntimeException e) {
+            warn(e);
+        }
     }
-    @Override public void close() {
+
+    @Override
+    public void close() {
         closed = true;
-        for (UUID uuid : List.copyOf(attachments.keySet())) remove(uuid);
+        for (UUID uuid : List.copyOf(attachments.keySet())) {
+            remove(uuid);
+        }
     }
+
     private void warn(RuntimeException e) {
-        plugin.getLogger().warning("Could not update a SuperPerms transient attachment: " + e.getClass().getSimpleName());
+        plugin.getLogger()
+                .warning(
+                        "Could not update a SuperPerms transient attachment: "
+                                + e.getClass().getSimpleName());
     }
 
     @Override
