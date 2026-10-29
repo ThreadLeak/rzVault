@@ -1,0 +1,28 @@
+name: Bug report
+description: Report a runtime or compatibility problem.
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem and expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Versions and providers
+      description: rzVault, Paper, Java, and the economy/permissions plugins involved.
+    validations:
+      required: true
+  - type: textarea
+    id: diagnostics
+    attributes:
+      label: Diagnostics and relevant errors
+      description: Include /rzvault output and relevant sanitized console errors.
+      render: text

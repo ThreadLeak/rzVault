@@ -1,0 +1,22 @@
+config-version: 1
+prefix: "&#FFD900● &f"
+
+# Colors: &a or &#RRGGBB. Newlines: \n. An empty string disables its message.
+# The prefix is included only where %prefix% appears. Russian example: docs/config.ru.yml.
+messages:
+  no-permission: "&#FF0000You do not have permission to use this command."
+  usage: "%prefix%Use &#FFD900/rzvault &for &#FFD900/rzvault reload&f."
+  reload-success: "%prefix%Configuration &#00FF00reloaded&f."
+  reload-error: "&#FF0000Invalid configuration&f. Previous settings were retained; see the console for details."
+
+  header: "%prefix%&#FFD900rzVault &7v%version%"
+  service-line: "&f%service%: &#00D8FF%provider% &8| %state%"
+  provider-line: " &7%selected%%provider% &8| &f%plugin% &8| &7%priority% &8| %state%"
+  selected: "&#FFD900● &7"
+  not-found: "&7not found"
+  unknown-provider: "&7unreadable provider name"
+  unknown-owner: "&7unknown"
+  state-ready: "&#00FF00available"
+  state-disabled: "&#FFAA00disabled"
+  state-error: "&#FF0000inspection failed"
+  state-missing: "&#FF0000no provider"

@@ -1,0 +1,7 @@
+* text=auto eol=lf
+*.cmd text eol=crlf
+*.jar binary
+*.png binary
+
+# Preserve byte-for-byte upstream source provenance.
+src/main/java/net/milkbowl/vault/** -text

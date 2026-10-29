@@ -1,18 +1,31 @@
-*/**/.classpath
-.classpath
-*/**/.externalToolBuilders
-.externalToolBuilders
-*/**/.project
-.project
-*/**/.settings
-.settings
-javadoc
-Vault.jar
-/Vault.iml
-/target
+# Build output and downloaded tools
+/target/
+/.build-cache/
+/.m2/
+/.backups/
+/legacy/
+*.jar
+*.class
+*.log
+*.lck
+*.hprof
+hs_err_pid*
 
-#added by LRFLEW
-#feel free to remove
-bin
-*.DS_Store
-/dependency-reduced-pom.xml
+# Local IDE/OS state
+.idea/
+.vscode/
+*.iml
+.classpath
+.project
+.settings/
+.DS_Store
+Thumbs.db
+
+# Local credentials and runtime data
+.env
+.env.*
+!.env.example
+/settings.xml
+/plugins/
+/world*/
+/server.properties

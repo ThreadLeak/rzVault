@@ -1,0 +1,22 @@
+{
+  "repository": "https://github.com/MilkBowl/VaultAPI",
+  "tag": "1.7",
+  "commit": "68f14eca202d9b7f1a0fe5a4dcfcfbe26d4a6a40",
+  "files": {
+    "src/main/java/net/milkbowl/vault/economy/EconomyResponse.java": "9d47dada2b1712700e7b2b12faed4792d94a440f42c84d932eb6c8dd787c98bf",
+    "src/main/java/net/milkbowl/vault/economy/Economy.java": "a99c4c0b4db1c22000474ddfac1d4776f0afaa7a872b966e615c0f6b0c623a35",
+    "src/main/java/net/milkbowl/vault/economy/AbstractEconomy.java": "6b2ac827e01129de8b7f7f17af04737d8345312cf2b63855db4cbd609f614971",
+    "src/main/java/net/milkbowl/vault/chat/Chat.java": "70c3cb8740d1b2359129354fa410c485aa60a69f486441aa7417eee63cb98e5e",
+    "src/main/java/net/milkbowl/vault/permission/Permission.java": "11d07f6669278792aeab6dfb3bdf0bd397439a76f2e395bf25f5c164699aa954"
+  },
+  "abiBaseline": {
+    "artifact": "com.github.MilkBowl:VaultAPI:1.7",
+    "jarSha256": "47f6a400a8ab22012e6a320f7bfc63621ce4a246e1c60502ff7fc91d532d2601",
+    "records": 222,
+    "fixture": "src/test/resources/vault-api-1.7-abi.txt",
+    "publicApiClasses": 6,
+    "ignoredCompilerPrivateClasses": [
+      "net/milkbowl/vault/economy/EconomyResponse$1"
+    ]
+  }
+}

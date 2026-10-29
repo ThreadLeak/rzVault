@@ -1,0 +1,21 @@
+config-version: 1
+prefix: "&#FFD900● &f"
+
+# Цвета: &a, &#RRGGBB. Перенос строки: \n. Пустая строка отключает сообщение.
+messages:
+  no-permission: "У вас &#FF0000нет доступа &fк этой команде."
+  usage: "%prefix%Используйте &#FFD900/rzvault &fили &#FFD900/rzvault reload&f."
+  reload-success: "%prefix%Конфигурация &#00FF00успешно &fперезагружена."
+  reload-error: "&#FF0000Ошибка конфигурации&f. Прежние настройки сохранены; подробности в консоли."
+
+  header: "%prefix%&#FFD900rzVault &7v%version%"
+  service-line: "&f%service%: &#00D8FF%provider% &8| %state%"
+  provider-line: " &7%selected%%provider% &8| &f%plugin% &8| &7%priority% &8| %state%"
+  selected: "&#FFD900● &7"
+  not-found: "&7не найден"
+  unknown-provider: "&7не удалось прочитать имя"
+  unknown-owner: "&7неизвестен"
+  state-ready: "&#00FF00доступен"
+  state-disabled: "&#FFAA00отключён"
+  state-error: "&#FF0000ошибка проверки"
+  state-missing: "&#FF0000нет провайдера"

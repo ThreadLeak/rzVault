@@ -1,108 +1,135 @@
-# Vault - Abstraction Library for Bukkit - [![Build Status](https://app.travis-ci.com/MilkBowl/Vault.svg?branch=master)](https://app.travis-ci.com/MilkBowl/Vault)
+# rzVault
 
-## For Developers:
-Please see the [VaultAPI](https://www.github.com/MilkBowl/VaultAPI) page for
-information on developing with Vault's API. In the past, you would use the same
-artifact as servers installed, but the API has now been split from the main
-project and is under a different artifact name. Please make sure you accommodate
-this change in your build process.
+[Русский](README.ru.md) · [License](LICENSE) · [Changes](CHANGELOG.md)
 
-## Installing
-Installing Vault is as simple as copying the provided "Vault.jar" to your
-"<bukkit-install-dir>/plugins" directory, and the rest is automatic! If you
-wish to perform configuration changes, this can be done via a configuration
-file but should not be necessary in most cases. See the "Advanced
-Configuration" section for more information.
+A small, classic Vault API bridge for modern Paper servers. Originally created
+for HopeWorld and prepared for public use by **Raze / [ThreadLeak](https://github.com/ThreadLeak)**.
 
+rzVault makes the standard `net.milkbowl.vault.*` API available to other plugins,
+reports their registered services, and supplies a minimal Bukkit-permission
+fallback. **It does not store money, create an economy, or replace LuckPerms.**
 
-## Why Vault?
-I have no preference which library suits your plugin and development efforts
-best. Really, I thought a central suite (rather...Vault) of solutions was the
-proper avenue than focusing on a single category of plugin. That's where
-the idea for Vault came into play.
+## Features
 
-So, what features do I _think_ you'll like the most?
+- Classic VaultAPI **1.7**, including deprecated API entry points, with original packages.
+- `provides: [Vault]` for modern plugin dependency resolution.
+- Economy, Permission and Chat diagnostics showing the actual selected provider,
+  its owner, service priority and availability.
+- A `Lowest`-priority SuperPerms fallback with owned, temporary permission attachments.
+- Editable messages, HEX/legacy colors, optional `%prefix%` and safe config reload.
+- No bundled economy adapters, telemetry, update checker, databases or polling tasks.
 
-* No need to include my source code in your plugin
-  All of Vault is run in its own plugin, so all you need to do is obtain an
-  instance of it! This simplifies issues with multiple plugins using the same
-  namespaces. Just simply add Vault.jar to your download zip file!
-* Broad range of supported plugins
-  I wanted an abstraction layer not only for Economic plugins but also
-  Permission plugins as well.
-* Choice!
-  That's half the fun of Bukkit! We get to choose what to use. More choice
-  has never hurt developers, so here's to choice!
+## Requirements and compatibility
 
+| Component | Target |
+| --- | --- |
+| Java | **21** |
+| Server | **Paper 1.21.11**; other server versions have not been validated |
+| Economy | A separate plugin registering the classic Vault `Economy` service |
+| Permissions / chat metadata | A provider such as LuckPerms, when those features are needed |
 
-## Permissions
-* vault.admin
-  - Determines if a player should receive the update notices
+EssentialsX and rzEssentials can register their own economy provider. Without an
+Economy provider, rzVault can load but money-dependent plugins still lack an
+economy. LuckPerms normally supplies Permission and Chat with a higher priority
+than the fallback. Chat here means the Vault metadata API, not a player-chat system.
 
-## License
-Copyright (C) 2011-2018 Morgan Humes <morgan@lanaddict.com>
+This is a focused fork, not a bundle of the historical Vault adapters. Older
+plugins that require Vault to adapt their private APIs, or that depend on the
+internal class `net.milkbowl.vault.Vault`, are outside its compatibility scope.
+VaultUnlocked-specific extensions are not implemented. Validate your actual
+provider/consumer combination before deployment.
 
-Vault is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
+## Installation
 
-Vault is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-GNU Lesser General Public License for more details.
+1. Stop the server and keep a backup of the existing bridge JAR/configuration.
+2. Install **`rzVault-1.0.1.jar`** in `plugins/`.
+3. Use **one Vault implementation**: remove the previous Vault, VaultUnlocked or
+   rzVault JAR. Do not install `*-sources.jar`.
+4. Start the server with your provider plugins, then run `/rzvault` from the
+   console or an administrator account.
+5. Check the selected providers and test the relevant shop/payment plugins.
 
-You should have received a copy of the GNU Lesser General Public License
-with Vault. If not, see <http://www.gnu.org/licenses/>.
+Existing money and permission data belong to their provider plugins; rzVault does
+not migrate or delete them. A missing/disabled/broken selected service is shown
+as such; diagnostics do not silently substitute a lower-priority provider.
 
-## Building
-Vault comes with all libraries needed to build from the current branch and
-also comes with an Apache Ant build file (build.xml) and a Maven build file
-(pom.xml). Maven is currently the preferred build method.
+## Commands
 
+| Command | Purpose | Permission |
+| --- | --- | --- |
+| `/rzvault` | Show registered Vault providers and their state | `vault.admin` |
+| `/vault-info` | Alias of `/rzvault` | `vault.admin` |
+| `/rzvault reload` | Validate and reload messages | `vault.admin` |
 
-## Dependencies
-Because Vault provides a bridge to other plugins, their binaries will be
-required to build from. To ease this, they have been included in the lib
-folder and will be updated from time to time. For plugin developers, it
-is not necessary to use these libraries when implementing Vault. You will
-only need to compile against Vault.
+`vault.admin` defaults to operators. It grants diagnostics/config reload, not
+access to balances or permission-group administration. Reload preserves the last
+valid messages on a configuration error and does not re-register providers.
 
+## Configuration
 
-## Supported Plugins
-Vault provides abstraction for the following categories and plugins. If
-you have your own plugin that you believe should be supported, you'll need
-to add your own connector within your plugin as Vault no longer maintains
-new plugin connectors.
+The first start creates `plugins/rzVault/config.yml` with English messages. For
+Russian, use [docs/config.ru.yml](docs/config.ru.yml) as your configuration.
+Existing configured files are preserved. See [configuration reference](docs/CONFIGURATION.md).
 
-* Permissions
-  - bPermissions
-  - bPermissions 2 (https://dev.bukkit.org/projects/bpermissions)
-  - DroxPerms
-  - Group Manager (Essentials) (https://forums.bukkit.org/threads/15312/)
-  - LuckPerms (https://www.spigotmc.org/resources/luckperms-an-advanced-permissions-plugin.28140/)
-  - OverPermissions (https://dev.bukkit.org/projects/overpermissions)
-  - Permissions 3 (https://forums.bukkit.org/threads/18430/)
-  - PermissionsBukkit
-  - Permissions Ex (PEX) (https://forums.bukkit.org/threads/18140/)
-  - Privileges
-  - rscPermissions
-  - SimplyPerms
-  - SuperPerms (Bukkit's default)
-  - TotalPermissions (https://dev.bukkit.org/projects/totalpermissions)
-  - XPerms
-  - zPermissions
+## Build from source
 
-* Chat
-  - bPermissions
-  - Group Manager (Essentials) (https://forums.bukkit.org/threads/15312/)
-  - iChat
-  - LuckPerms (https://www.spigotmc.org/resources/luckperms-an-advanced-permissions-plugin.28140/)
-  - mChat
-  - mChatSuite
-  - OverPermissions (https://dev.bukkit.org/projects/overpermissions)
-  - Permissions 3 (https://forums.bukkit.org/threads/18430/)
-  - Permissions Ex (PEX) (https://forums.bukkit.org/threads/18140/)
-  - rscPermissions
-  - TotalPermissions (https://dev.bukkit.org/projects/totalpermissions)
-  - zPermissions
+Install **JDK 21**. Maven is pinned and downloaded by the official wrapper on
+first use; no globally installed Maven or private dependency cache is required.
+
+```sh
+# Linux / macOS
+sh ./mvnw --batch-mode --no-transfer-progress verify
+```
+
+```powershell
+# Windows PowerShell
+.\mvnw.cmd --batch-mode --no-transfer-progress verify
+```
+
+Outputs:
+
+- `target/rzVault-1.0.1.jar` — installable plugin, with the classic API included.
+- `target/rzVault-1.0.1-sources.jar` — source artifact, not a plugin.
+
+The Paper API uses an exact published snapshot revision; Maven/plugins are pinned
+and archive timestamps are fixed. This supports repeatable builds with the same
+JDK and dependency artifacts. The first build needs access to Maven Central and
+the official Paper repository. VaultAPI sources are included in this repository,
+so a JitPack lookup is unnecessary.
+
+[GitHub Actions](.github/workflows/build.yml) verifies the build on Linux and
+Windows. Workflow permissions are read-only, and actions are pinned to commit SHAs.
+Local test success does not claim that hosted Actions have already run.
+
+## For plugin developers
+
+Compile consumers against the classic VaultAPI using `provided` / `compileOnly`;
+do not bundle another copy of the API into every consumer. Declare your bridge
+dependency on `Vault`, and resolve the actual service through Bukkit:
+
+```java
+RegisteredServiceProvider<Economy> registration =
+    getServer().getServicesManager().getRegistration(Economy.class);
+if (registration == null) {
+    // No economy provider is installed/enabled yet.
+    return;
+}
+Economy economy = registration.getProvider();
+```
+
+The fallback supports online Bukkit permission queries and temporary additions.
+It does not persist permissions, manage real groups, or create world contexts.
+Temporary attachments are released on removal, quit and shutdown. Read the
+[detailed behavior](docs/ARCHITECTURE.md) before relying on the fallback.
+
+## Contributing and releases
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) and the [release checklist](docs/RELEASING.md).
+Report problems with the plugin/server/Java versions, `/rzvault` diagnostics and
+relevant errors. See [SECURITY.md](SECURITY.md) for sensitive reports.
+
+## Attribution
+
+Released under **LGPL-3.0-or-later**. Vault / VaultAPI were created by MilkBowl and
+contributors. rzVault preserves the classic API's source and attribution; see
+[NOTICE.md](NOTICE.md) for the exact upstream revision and included license texts.

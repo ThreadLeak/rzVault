@@ -1,0 +1,30 @@
+name: rzVault
+version: '${project.version}'
+main: dev.raze.rzvault.RzVault
+api-version: '1.21'
+load: STARTUP
+prefix: rzVault
+authors:
+  - Raze
+description: Lightweight classic Vault API bridge, originally created for HopeWorld.
+website: https://github.com/ThreadLeak/rzVault
+provides:
+  - Vault
+loadbefore:
+  - LuckPerms
+  - Essentials
+  - EssentialsX
+  - rzEssentials
+
+commands:
+  rzvault:
+    description: Shows active Vault service providers.
+    usage: /rzvault [reload]
+    aliases:
+      - vault-info
+    permission: vault.admin
+
+permissions:
+  vault.admin:
+    description: Allows viewing rzVault service diagnostics.
+    default: op
